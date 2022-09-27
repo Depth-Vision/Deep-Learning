@@ -30,15 +30,11 @@ class DataInput():
     def preprocess(self):
         data_path = self.data_path
         # 数据预处理
-        data_transform = {x:transforms.Compose([transforms.Resize(self.img_size),
-                                       transforms.ToTensor()]) for x in ['train', 'valid']}   
+        data_transform = {x:transforms.Compose([transforms.Resize(self.img_size),transforms.ToTensor()]) for x in ['train', 'valid']}   
         # 读取数据
-        image_datasets = {x:datasets.ImageFolder(root = os.path.join(data_path,x),
-                                        transform = data_transform[x]) for x in ['train', 'valid']}  
+        image_datasets = {x:datasets.ImageFolder(root = os.path.join(data_path,x),transform = data_transform[x]) for x in ['train', 'valid']}  
         # 数据装载
-        dataloader = {x:DataLoader(dataset = image_datasets[x],
-                                           batch_size = self.batch_size,
-                                           shuffle = True) for x in ['train', 'valid']} 
+        dataloader = {x:DataLoader(dataset = image_datasets[x],batch_size = self.batch_size,shuffle = True) for x in ['train', 'valid']} 
         self.datasets = image_datasets 
         return dataloader    
 
