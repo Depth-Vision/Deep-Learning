@@ -1,4 +1,4 @@
-# Pytorch CNN图像分类工程 过程总结
+# Pytorch 图像分类工程过程总结
 
 ## 1.数据集准备
 
@@ -63,8 +63,8 @@ class DataInput():
                                            batch_size = self.batch_size,
                                            shuffle = True) for x in ['train', 'valid']} 
         self.datasets = image_datasets 
-        return dataloader    
-    
+        return dataloader  
+  
 ```
 
 ## 3.搭建模型
@@ -77,8 +77,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchsummary import summary
 
-class LeNet(nn.Module):            
-    def __init__(self,classes_num):                
+class LeNet(nn.Module):          
+    def __init__(self,classes_num):              
         super(LeNet, self).__init__()  
         self.conv1 = nn.Conv2d(3, 16, 5)
         self.pool1 = nn.MaxPool2d(2, 2)
@@ -87,7 +87,7 @@ class LeNet(nn.Module):
         self.fc1 = nn.Linear(32*5*5, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, classes_num)
-                           
+                         
     def forward(self, x):            # input(3, 32, 32)  
         x = F.relu(self.conv1(x))    #output(16, 28, 28)
         x = self.pool1(x)            # output(16, 14, 14)
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     LeNet_ = LeNet(15).to(device)
     summary(LeNet_, input_size=(3, 32, 32))
-    
+  
 ```
 
 ## 4.模型训练
@@ -199,7 +199,7 @@ class Trainer():
                     self.model.train(True)
                 else:
                     print("valid......")
-                    self.model.train(False)              
+                    self.model.train(False)            
                 run_loss = 0.0
                 num_correct = 0.0
                 # 从数据装载器里抽出数据输入网络进行训练
@@ -234,7 +234,7 @@ class Trainer():
                 self.save_model_weight(mode="last")
         time_end = time.time()   
         train_time = (time_end - time_open) / 60
-            
+          
         print("-"*20)
         print("Training is over")
         print("Training time: " + str(train_time) + "min")
@@ -308,11 +308,11 @@ def test(path,model_path):
                 # else:
                 #     print(img_path_n,"Predict error, Label: " + cla + "  predict: " + classes[int(predict)])
         print("Classes: " + cla + "    ACC: ",str((pre_correct/len(img_list))*100) + "%")
-    
+  
 
 if __name__ == "__main__":
     test("./Data/valid","./model/last_model_weight.pth")
-    
+  
 ```
 
 。
