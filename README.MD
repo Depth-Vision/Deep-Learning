@@ -16,6 +16,11 @@
 
 ## 总结目录
 
-- Image Classification（图像分类）
-  - 创建图像分类工程的过程总结
-  - LeNet实现
+- Image_Classification（图像分类）
+
+  - PyTorch-创建图像分类工程的过程总结（完成）
+  - LeNet （实现）
+- Image_Segmentation （图像分割）
+
+  - PyTorch-创建图像分割工程过程总结 （更新中）
+  - U-Net  （更新中）
