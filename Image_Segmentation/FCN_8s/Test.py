@@ -3,7 +3,7 @@ import time
 import torch
 import shutil
 from PIL import Image
-from model import AAMC_Net
+from model import FCN
 from gray import Gray,threshold1
 from torchvision import transforms
 from torchvision.utils import save_image
@@ -21,7 +21,7 @@ label = transforms.Compose([                                                    
 
 
 def prediect(a,img_path,save_path):                                                             # 预测函数
-    model = AAMC_Net().cuda()                                                                   # 加载模型
+    model = FCN().cuda()                                                                   # 加载模型
     model.load_state_dict(torch.load("./AAMC_Net.pkl"))
     net=model.to(device)
     torch.no_grad()                                                                             # 张量计算无需计算梯度
