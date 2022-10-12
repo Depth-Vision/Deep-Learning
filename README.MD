@@ -23,4 +23,5 @@
 - Image_Segmentation （图像分割）
 
   - PyTorch-创建图像分割工程过程总结 （更新中）
-  - U-Net  （更新中）
+  - U-Net  （实现）
+  - FCN_8s （更新中）
