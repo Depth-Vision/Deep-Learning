@@ -64,10 +64,10 @@ class FCN(nn.Module):
         super(FCN,self).__init__()
         self.VGG = VGG()
         self.fconn = nn.Sequential(
-            nn.Conv2d(512, 512, kernel_size=1, stride=1, padding=0, dilation=1),
+            nn.Conv2d(512, 4096, kernel_size=7, stride=1, padding=0, dilation=1),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Conv2d(512, 512, kernel_size=1, stride=1, padding=0, dilation=1),
+            nn.Conv2d(4096, 4096, kernel_size=1, stride=1, padding=0, dilation=1),
             nn.ReLU(inplace=True),
             nn.Dropout()
         )
