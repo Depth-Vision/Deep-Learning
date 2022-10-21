@@ -1,3 +1,4 @@
+
 import os
 import torch 
 import torchvision.transforms as transforms
@@ -10,7 +11,7 @@ def test(path,model_path):
     path: 测试集地址
     model: 网络权重参数文件地址
     """
-    # classes = ("B1","B2","B3","B4","B5","BB","BS","NO","R1","R2","R3","R4","R5","RB","RS")
+    # 打开类别文本文件
     C = open("Classes.txt",encoding="gbk")
     classes = []
     for line in C:
