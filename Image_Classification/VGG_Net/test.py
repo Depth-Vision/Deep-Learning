@@ -1,9 +1,8 @@
-
 import os
 import torch 
 import torchvision.transforms as transforms
 from PIL import Image
-from model import LeNet
+from model import VGG_Net
 import cv2 as cv
 
 def test(path,model_path):
@@ -23,7 +22,7 @@ def test(path,model_path):
         transforms.ToTensor(),
         transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
     ])
-    net = LeNet(len(classes))
+    net = VGG_Net(len(classes))
     net.load_state_dict(torch.load(model_path))
     file_list = os.listdir(path)
     cla_prve = file_list[0]

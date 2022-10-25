@@ -2,7 +2,7 @@ import os
 import time
 import torch 
 import DataInput
-from model import LeNet
+from model import VGG_Net
 from torch.autograd import Variable
 
 class Trainer():
@@ -29,7 +29,7 @@ class Trainer():
         self.loss = torch.nn.CrossEntropyLoss()
         self.classes_num = self.data.classes_num()
         # 模型初始化
-        self.model = LeNet(self.classes_num)
+        self.model = VGG_Net(self.classes_num)
         if device == "gpu" or "GPU":
             self.device = torch.device('cuda')
             self.device_name = "GPU"
