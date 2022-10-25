@@ -20,6 +20,7 @@
 
   - PyTorch-创建图像分类工程的过程总结（完成）
   - LeNet （实现）
+  - VGG-Net（实现）
 - Image_Segmentation （图像分割）
 
   - PyTorch-创建图像分割工程过程总结 （更新中）
