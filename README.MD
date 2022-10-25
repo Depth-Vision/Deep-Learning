@@ -21,7 +21,9 @@
 硬件环境：
 
 - Intel(R) Core(TM) i7-10750H CPU
+- 内存：16G
 - NVIDIA GeForce GTX 1650 Ti
+- 现存：4G
 
 ## 总结目录
 
