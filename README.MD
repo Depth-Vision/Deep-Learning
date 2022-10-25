@@ -8,11 +8,20 @@
 
 ## 环境配置
 
+软件环境：
+
 - MiniConda 3 (虚拟环境)
 - Python 3.8.10
 - VSCode (IDE)
-- PyTorch 1.12.1+cu113
-- torchvision 0.13.1+cu113
+- CUDA 11.6
+- PyTorch 1.12.1+cu116
+- torchvision 0.13.1+cu116
+- torchsummary 1.5.1
+
+硬件环境：
+
+- Intel(R) Core(TM) i7-10750H CPU
+- NVIDIA GeForce GTX 1650 Ti
 
 ## 总结目录
 
