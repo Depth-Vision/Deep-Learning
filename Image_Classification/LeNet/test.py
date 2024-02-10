@@ -12,7 +12,7 @@ def test(path,model_path):
     model: 网络权重参数文件地址
     """
     # 打开类别文本文件
-    C = open("Classes.txt",encoding="gbk")
+    C = open("Image_Classification/LeNet/Classes.txt",encoding="gbk")
     classes = []
     for line in C:
         classes.append(line.strip())
@@ -21,7 +21,7 @@ def test(path,model_path):
     transform = transforms.Compose([
         transforms.Resize((32,32)),
         transforms.ToTensor(),
-        transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
+        transforms.Grayscale(num_output_channels=1)
     ])
     net = LeNet(len(classes))
     net.load_state_dict(torch.load(model_path))
@@ -55,4 +55,4 @@ def test(path,model_path):
     
 
 if __name__ == "__main__":
-    test("./Data/valid","./model/last_model_weight.pth")
+    test("Image_Classification/Data/valid","Image_Classification/LeNet/model/best_model_weight.pth")
