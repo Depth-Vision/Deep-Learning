@@ -53,18 +53,13 @@ class DataInput():
     def preprocess(self):
         data_path = self.data_path
         # 数据预处理
-        data_transform = {x:transforms.Compose([transforms.Resize(self.img_size),
-                                       transforms.ToTensor()]) for x in ['train', 'valid']}   
+        data_transform = {x:transforms.Compose([transforms.Resize(self.img_size),transforms.ToTensor(),transforms.Grayscale(num_output_channels=1)]) for x in ['train', 'valid']}   
         # 读取数据
-        image_datasets = {x:datasets.ImageFolder(root = os.path.join(data_path,x),
-                                        transform = data_transform[x]) for x in ['train', 'valid']}  
+        image_datasets = {x:datasets.ImageFolder(root = os.path.join(data_path,x),transform = data_transform[x]) for x in ['train', 'valid']}  
         # 数据装载
-        dataloader = {x:DataLoader(dataset = image_datasets[x],
-                                           batch_size = self.batch_size,
-                                           shuffle = True) for x in ['train', 'valid']} 
+        dataloader = {x:DataLoader(dataset = image_datasets[x],batch_size = self.batch_size,shuffle = True) for x in ['train', 'valid']} 
         self.datasets = image_datasets 
-        return dataloader  
-  
+        return dataloader    
 ```
 
 ## 3.搭建模型
@@ -77,23 +72,23 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchsummary import summary
 
-class LeNet(nn.Module):      
-    def __init__(self,classes_num):          
+class LeNet(nn.Module):          
+    def __init__(self,classes_num):              
         super(LeNet, self).__init__()  
-        self.conv1 = nn.Conv2d(3, 16, 5)
+        self.conv1 = nn.Conv2d(1, 6, 5)
         self.pool1 = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(16, 32, 5)
+        self.conv2 = nn.Conv2d(6, 16, 5)
         self.pool2 = nn.MaxPool2d(2, 2)
-        self.fc1 = nn.Linear(32*5*5, 120)
+        self.fc1 = nn.Linear(16*5*5, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, classes_num)
-                     
-    def forward(self, x):            # input(3, 32, 32)  
-        x = F.relu(self.conv1(x))    #output(16, 28, 28)
-        x = self.pool1(x)            # output(16, 14, 14)
-        x = F.relu(self.conv2(x))    # output(32, 10, 10)
-        x = self.pool2(x)            # output(32, 5, 5)
-        x = x.view(-1, 32*5*5)       # output(32*5*5)
+                         
+    def forward(self, x):            # input(1, 32, 32)  
+        x = F.relu(self.conv1(x))    # output(6, 28, 28)
+        x = self.pool1(x)            # output(6, 14, 14)
+        x = F.relu(self.conv2(x))    # output(16, 10, 10)
+        x = self.pool2(x)            # output(16, 5, 5)
+        x = x.view(-1, 16*5*5)       # output(16*5*5)
         x = F.relu(self.fc1(x))      # output(120)
         x = F.relu(self.fc2(x))      # output(84)
         x = self.fc3(x)              # output(classes_num)
@@ -104,7 +99,7 @@ if __name__ == "__main__":
     # print(LeNet(15))
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     LeNet_ = LeNet(15).to(device)
-    summary(LeNet_, input_size=(3, 32, 32))
+    summary(LeNet_, input_size=(1, 32, 32))
   
 ```
 
@@ -123,7 +118,7 @@ import os
 import time
 import torch 
 import DataInput
-from model1 import LeNet
+from model import LeNet
 from torch.autograd import Variable
 
 class Trainer():
@@ -162,6 +157,7 @@ class Trainer():
         # 学习率初始化及学习率优化器   
         self.optim = torch.optim.Adam(self.model.parameters(),lr=self.lr,betas=(0.5,0.999))  
 
+
     # 保存模型网络及权重参数
     def save_all_model(self,mode):
 
@@ -169,11 +165,13 @@ class Trainer():
             os.makedirs(self.model_path)
         torch.save(self.model,self.model_path + "/"+str(mode) + "_model.pth")
 
+
     # 仅保存模型网络权重参数
     def save_model_weight(self,mode):
         if os.path.exists(self.model_path) is False:
             os.makedirs(self.model_path)
         torch.save(self.model.state_dict(),self.model_path + "/"+str(mode) + "_model_weight.pth")
+
 
     # 模型训练
     def train(self):
@@ -199,7 +197,8 @@ class Trainer():
                     self.model.train(True)
                 else:
                     print("valid......")
-                    self.model.train(False)        
+                    self.model.train(False)
+                
                 run_loss = 0.0
                 num_correct = 0.0
                 # 从数据装载器里抽出数据输入网络进行训练
@@ -219,7 +218,7 @@ class Trainer():
                     # 每15个批次输出一次训练loss和Acc
                     if batch % 15 == 0 and phase == "train":
                         print("batch:{}   trainloss:{:.6f}   trainACC:{:.4f}%".format(batch,run_loss / batch,
-                                                                               100 * num_correct / (self.batch_size * batch)))
+                                                                                      100 * num_correct / (self.batch_size * batch)))
                 epoch_loss_v = run_loss * self.batch_size / self.data.data_size(phase=phase)
                 epoch_acc = num_correct / self.data.data_size(phase=phase)
                 print("{}   Loss: {:.6f}   Acc: {:.4f} %".format(phase,epoch_loss_v,epoch_acc * 100))
@@ -234,7 +233,7 @@ class Trainer():
                 self.save_model_weight(mode="last")
         time_end = time.time()   
         train_time = (time_end - time_open) / 60
-      
+            
         print("-"*20)
         print("Training is over")
         print("Training time: " + str(train_time) + "min")
@@ -243,7 +242,7 @@ class Trainer():
 
 
 if __name__ == "__main__":
-    Train = Trainer(lr=0.001,batch_size=8,num_epoch=20,img_w=32,img_h=32,data_path="./Data",model_path="./model",device="GPU")
+    Train = Trainer(lr=0.001,batch_size=8,num_epoch=30,img_w=32,img_h=32,data_path="Image_Classification/Data",model_path="Image_Classification/LeNet/model",device="GPU")
     Train.train()
 
 ```
@@ -255,11 +254,12 @@ if __name__ == "__main__":
 创建test.py 文件,测试模型对各个类别识别的准确度。
 
 ```python
+
 import os
 import torch 
 import torchvision.transforms as transforms
 from PIL import Image
-from model1 import LeNet
+from model import LeNet
 import cv2 as cv
 
 def test(path,model_path):
@@ -267,8 +267,8 @@ def test(path,model_path):
     path: 测试集地址
     model: 网络权重参数文件地址
     """
-    # classes = ("B1","B2","B3","B4","B5","BB","BS","NO","R1","R2","R3","R4","R5","RB","RS")
-    C = open("Classes.txt",encoding="gbk")
+    # 打开类别文本文件
+    C = open("Image_Classification/LeNet/Classes.txt",encoding="gbk")
     classes = []
     for line in C:
         classes.append(line.strip())
@@ -277,7 +277,7 @@ def test(path,model_path):
     transform = transforms.Compose([
         transforms.Resize((32,32)),
         transforms.ToTensor(),
-        transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
+        transforms.Grayscale(num_output_channels=1)
     ])
     net = LeNet(len(classes))
     net.load_state_dict(torch.load(model_path))
@@ -308,10 +308,10 @@ def test(path,model_path):
                 # else:
                 #     print(img_path_n,"Predict error, Label: " + cla + "  predict: " + classes[int(predict)])
         print("Classes: " + cla + "    ACC: ",str((pre_correct/len(img_list))*100) + "%")
-  
+    
 
 if __name__ == "__main__":
-    test("./Data/valid","./model/last_model_weight.pth")
+    test("Image_Classification/Data/valid","Image_Classification/LeNet/model/best_model_weight.pth")
   
 ```
 
