@@ -1,7 +1,5 @@
-from xdrlib import ConversionError
 import torch 
 import torch.nn as nn
-import torch.nn.functional as F
 from torchsummary import summary
 
 class Conv_block(nn.Module):
@@ -10,7 +8,8 @@ class Conv_block(nn.Module):
         self.conv = nn.Sequential(
                 nn.Conv2d(in_channels=ch_in, out_channels=ch_out, kernel_size=3, padding=1),
                 nn.BatchNorm2d(ch_out),
-                nn.ReLU(inplace=True),
+                # nn.ReLU(inplace=True),
+                nn.SELU(inplace=True)
                 )
     def forward(self,x):
         out = self.conv(x)
@@ -40,10 +39,10 @@ class VGG_Net(nn.Module):
         
         self.fc_layers = nn.Sequential(
                 nn.Linear(512*7*7, 4096),
-                nn.ReLU(inplace=True),
+                nn.SELU(inplace=True),
                 nn.Dropout(0.5),
                 nn.Linear(4096, 4096),
-                nn.ReLU(inplace=True),
+                nn.SELU(inplace=True),
                 nn.Dropout(0.5),
                 nn.Linear(4096, classes_num),
                 )
@@ -70,14 +69,13 @@ class VGG_Net(nn.Module):
         x = self.Conv_12(x)
         x = self.Conv_13(x)
         x = self.Maxpool(x)
-
+        
         x = x.view(-1,512*7*7)
-
         x = self.fc_layers(x)
 
         return x
 
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    VGG_Net_ = VGG_Net(10).to(device)
+    VGG_Net_ = VGG_Net(15).to(device)
     summary(VGG_Net_,input_size=(3,224,224))

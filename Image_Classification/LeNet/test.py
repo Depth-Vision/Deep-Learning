@@ -47,7 +47,7 @@ def test(path,model_path):
                 Y = net(img)
                 predict = torch.max(Y,1)
                 predict = predict[1].numpy()
-                if classes[int(predict)] == cla:
+                if classes[int(predict[0])] == cla:
                     pre_correct += 1
                 # else:
                 #     print(img_path_n,"Predict error, Label: " + cla + "  predict: " + classes[int(predict)])
@@ -55,4 +55,4 @@ def test(path,model_path):
     
 
 if __name__ == "__main__":
-    test("Image_Classification/Data/valid","Image_Classification/LeNet/model/best_model_weight.pth")
+    test("Image_Classification/Data_RM_bin/valid","Image_Classification/LeNet/model/best_model_weight.pth")

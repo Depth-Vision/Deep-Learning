@@ -59,7 +59,7 @@ class DataInput():
         # 数据装载
         dataloader = {x:DataLoader(dataset = image_datasets[x],batch_size = self.batch_size,shuffle = True) for x in ['train', 'valid']} 
         self.datasets = image_datasets 
-        return dataloader    
+        return dataloader  
 ```
 
 ## 3.搭建模型
@@ -67,13 +67,13 @@ class DataInput():
 创建model.py文件。模型随意搭建或引用。以LeNet为例。
 
 ```python
-import torch
+0import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchsummary import summary
 
-class LeNet(nn.Module):          
-    def __init__(self,classes_num):              
+class LeNet(nn.Module):  
+    def __init__(self,classes_num):    
         super(LeNet, self).__init__()  
         self.conv1 = nn.Conv2d(1, 6, 5)
         self.pool1 = nn.MaxPool2d(2, 2)
@@ -82,7 +82,7 @@ class LeNet(nn.Module):
         self.fc1 = nn.Linear(16*5*5, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, classes_num)
-                         
+               
     def forward(self, x):            # input(1, 32, 32)  
         x = F.relu(self.conv1(x))    # output(6, 28, 28)
         x = self.pool1(x)            # output(6, 14, 14)
@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
     # print(LeNet(15))
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    LeNet_ = LeNet(15).to(device)
+    LeNet_ = LeNet(8).to(device)
     summary(LeNet_, input_size=(1, 32, 32))
   
 ```
@@ -114,7 +114,7 @@ if __name__ == "__main__":
 **注：要同时考虑训练集和测试集。**
 
 ```python
-import os
+_import os
 import time
 import torch 
 import DataInput
@@ -198,7 +198,7 @@ class Trainer():
                 else:
                     print("valid......")
                     self.model.train(False)
-                
+    
                 run_loss = 0.0
                 num_correct = 0.0
                 # 从数据装载器里抽出数据输入网络进行训练
@@ -233,7 +233,7 @@ class Trainer():
                 self.save_model_weight(mode="last")
         time_end = time.time()   
         train_time = (time_end - time_open) / 60
-            
+  
         print("-"*20)
         print("Training is over")
         print("Training time: " + str(train_time) + "min")
@@ -242,7 +242,7 @@ class Trainer():
 
 
 if __name__ == "__main__":
-    Train = Trainer(lr=0.001,batch_size=8,num_epoch=30,img_w=32,img_h=32,data_path="Image_Classification/Data",model_path="Image_Classification/LeNet/model",device="GPU")
+    Train = Trainer(lr=0.001,batch_size=8,num_epoch=30,img_w=32,img_h=32,data_path="Image_Classification/Data_bin",model_path="Image_Classification/LeNet/model",device="GPU")
     Train.train()
 
 ```
@@ -254,7 +254,6 @@ if __name__ == "__main__":
 创建test.py 文件,测试模型对各个类别识别的准确度。
 
 ```python
-
 import os
 import torch 
 import torchvision.transforms as transforms
@@ -308,10 +307,10 @@ def test(path,model_path):
                 # else:
                 #     print(img_path_n,"Predict error, Label: " + cla + "  predict: " + classes[int(predict)])
         print("Classes: " + cla + "    ACC: ",str((pre_correct/len(img_list))*100) + "%")
-    
+  
 
 if __name__ == "__main__":
-    test("Image_Classification/Data/valid","Image_Classification/LeNet/model/best_model_weight.pth")
+    test("Image_Classification/Data_bin/valid","Image_Classification/LeNet/model/best_model_weight.pth")
   
 ```
 

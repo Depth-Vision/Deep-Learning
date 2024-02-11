@@ -11,11 +11,12 @@
 软件环境：
 
 - MiniConda 3 (虚拟环境)
-- Python 3.8.10
+- Python 3.10.13
 - VSCode (IDE)
-- CUDA 11.6
-- PyTorch 1.12.1+cu116
-- torchvision 0.13.1+cu116
+- CUDA 12.1.0
+- cuDNN 8.9.5
+- PyTorch 2.1.1+cu121
+- torchvision 0.16.1+cu121
 - torchsummary 1.5.1
 
 硬件环境：

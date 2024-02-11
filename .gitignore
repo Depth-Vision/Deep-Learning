@@ -1,3 +1,8 @@
-/Image_Classification/Data
+Image_Classification/Data_RM
+Image_Classification/Data_RM_bin
+Image_Classification/Data_cat_dog
+Image_Classification/LeNet/model
+Image_Classification/VGG_Net/model
 /Image_Segmentation/DATA
 __pycache__
+

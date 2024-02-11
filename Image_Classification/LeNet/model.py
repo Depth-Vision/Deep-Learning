@@ -29,5 +29,5 @@ if __name__ == "__main__":
 
     # print(LeNet(15))
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    LeNet_ = LeNet(15).to(device)
+    LeNet_ = LeNet(8).to(device)
     summary(LeNet_, input_size=(1, 32, 32))

@@ -11,14 +11,14 @@ def test(path,model_path):
     model: 网络权重参数文件地址
     """
     # 打开类别文本文件
-    C = open("Classes.txt",encoding="gbk")
+    C = open("Image_Classification/VGG_Net/Classes.txt",encoding="gbk")
     classes = []
     for line in C:
         classes.append(line.strip())
     classes = tuple(classes)
     # print(classes)
     transform = transforms.Compose([
-        transforms.Resize((32,32)),
+        transforms.Resize((224,224)),
         transforms.ToTensor(),
         transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))
     ])
@@ -46,7 +46,7 @@ def test(path,model_path):
                 Y = net(img)
                 predict = torch.max(Y,1)
                 predict = predict[1].numpy()
-                if classes[int(predict)] == cla:
+                if classes[int(predict[0])] == cla:
                     pre_correct += 1
                 # else:
                 #     print(img_path_n,"Predict error, Label: " + cla + "  predict: " + classes[int(predict)])
@@ -54,4 +54,4 @@ def test(path,model_path):
     
 
 if __name__ == "__main__":
-    test("./Data/valid","./model/last_model_weight.pth")
+    test("Image_Classification/Data_RM/valid","Image_Classification/VGG_Net/model/best_model_weight.pth")

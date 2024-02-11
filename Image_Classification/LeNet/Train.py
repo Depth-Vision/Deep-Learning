@@ -126,33 +126,6 @@ class Trainer():
 
 
 if __name__ == "__main__":
-    Train = Trainer(lr=0.001,batch_size=8,num_epoch=30,img_w=32,img_h=32,data_path="Image_Classification/Data",model_path="Image_Classification/LeNet/model",device="GPU")
+    Train = Trainer(lr=0.001,batch_size=8,num_epoch=30,img_w=32,img_h=32,data_path="Image_Classification/Data_RM_bin",model_path="Image_Classification/LeNet/model",device="GPU")
     Train.train()
-
-
-       
-
-
-
-
-                    
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
