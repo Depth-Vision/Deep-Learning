@@ -45,7 +45,6 @@ class Synth90kDataset(Dataset):
                 path, text = r[0], r[1]
                 paths.append(path)
                 texts.append(text)
-
         return paths, texts
 
     def __len__(self):
@@ -73,7 +72,6 @@ class Synth90kDataset(Dataset):
 
             target = torch.LongTensor(target)
             target_length = torch.LongTensor(target_length)
-            # 如果DataLoader不设置collate_fn,则此处返回值为迭代DataLoader时取到的值
             return image, target, target_length
         else:
             return image
@@ -82,10 +80,9 @@ class Synth90kDataset(Dataset):
 def synth90k_collate_fn(batch):
     # zip(*batch)拆包
     images, targets, target_lengths = zip(*batch)
-    # stack就是向量堆叠的意思。一定是扩张一个维度，然后在扩张的维度上，把多个张量纳入仅一个张量。想象向上摞面包片，摞的操作即是stack，0轴即按块stack
+    # stack向量堆叠
     images = torch.stack(images, 0)
-    # cat是指向量拼接的意思。一定不扩张维度，想象把两个长条向量cat成一个更长的向量。
+    # cat向量拼接
     targets = torch.cat(targets, 0)
     target_lengths = torch.cat(target_lengths, 0)
-    # 此处返回的数据即使train_loader每次取到的数据，迭代train_loader，每次都会取到三个值，即此处返回值。
     return images, targets, target_lengths
