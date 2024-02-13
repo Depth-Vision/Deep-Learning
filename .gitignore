@@ -3,6 +3,7 @@ Image_Classification/Data_RM_bin
 Image_Classification/Data_cat_dog
 Image_Classification/LeNet/model
 Image_Classification/VGG_Net/model
-/Image_Segmentation/DATA
+Image_Segmentation/DATA
+Optical_character_recognition/CRNN/data/raw
 __pycache__
 

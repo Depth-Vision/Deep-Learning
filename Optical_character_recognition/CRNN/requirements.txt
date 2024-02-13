@@ -1,0 +1,14 @@
+# pip install -r requirements.txt
+# python   3.10.13 
+
+docopt==0.6.2
+numpy==1.26.2
+opencv-python==4.8.0.76
+Pillow==9.3.0
+scipy==1.11.4
+six==1.16.0
+torch==2.1.1+cu121
+torchaudio==2.1.1+cu121
+torchsummary==1.5.1
+torchvision==0.16.1+cu121
+tqdm==4.66.1
