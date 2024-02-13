@@ -1,3 +1,5 @@
+# 运行本脚本进行数据路径索引，生成索引文件
+# 包括test.txt、train.txt、val.txt
 import os
 from tqdm import tqdm
 
