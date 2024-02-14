@@ -80,15 +80,12 @@ class CRNN(nn.Module):
     # CNN+LSTM前向计算
     def forward(self, images):
         # shape of images: (batch, channel, height, width)
-
         conv = self.cnn(images)
         batch, channel, height, width = conv.size()
 
         conv = conv.view(batch, channel * height, width)
         conv = conv.permute(2, 0, 1)  # (width, batch, feature)
 
-        # 卷积接全连接。全连接输入形状为(width, batch, channel*height)，
-        # 输出形状为(width, batch, hidden_layer)，分别对应时序长度，batch，特征数，符合LSTM输入要求
         seq = self.map_to_seq(conv)
 
         recurrent, _ = self.rnn1(seq)
